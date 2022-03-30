@@ -39,7 +39,8 @@ ta = clusterAverage(spikeStruct.spikeTemplates+1, spikeAmps);
 tids = unique(spikeStruct.spikeTemplates);
 templateAmps(tids+1) = ta; % because ta only has entries for templates that had at least one spike
 
-% Get the waveform from the channel with the largest amplitude
+% Get the waveform from the channel with the largest amplitude - This is
+% only the template waveform, use getWaveForms function to extract real data
 % [~,tempChannel] = max(max(abs(spikeStruct.temps),[],2),[],3);
 waveforms = nan(size(spikeStruct.temps,1),size(spikeStruct.temps,2));
 for curr_template = 1:size(spikeStruct.temps,1)
@@ -60,12 +61,13 @@ for clusterI = 1:length(clusterIDs)
     templateIdx = mode(spikeTemplates)+1; % Templates are 0-indexed
    
     %% Place data in structure
-    cluster.Depth(clusterI)     = templateDepths(templateIdx,:);
-    cluster.Span(clusterI)      = templateSpan(templateIdx,:);
-    cluster.Amplitude(clusterI) = templateAmps(templateIdx,:);
-    cluster.Channel(clusterI)   = templateChannel(templateIdx,:);
-    cluster.Duration(clusterI)  = templateDuration(templateIdx,:);
-    cluster.Waveform(clusterI,:)  = waveforms(templateIdx,:);
+    cluster.ID(clusterI)            = clusterIDs(clusterI);
+    cluster.Depth(clusterI)         = templateDepths(templateIdx,:);
+    cluster.Span(clusterI)          = templateSpan(templateIdx,:);
+    cluster.Amplitude(clusterI)     = templateAmps(templateIdx,:);
+    cluster.Channel(clusterI)       = templateChannel(templateIdx,:);
+    cluster.Duration(clusterI)      = templateDuration(templateIdx,:);
+    cluster.TempWaveform(clusterI,:)    = waveforms(templateIdx,:);
 end
 
 
